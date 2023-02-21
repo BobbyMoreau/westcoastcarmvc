@@ -9,30 +9,31 @@ builder.Services.AddHttpClient();
 
 // Sätt upp databas konfiguration...
 builder.Services.AddDbContext<WestcoastCarsContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+    //options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Azure")));
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 // Ladda in data i databasen...
-using var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
+// using var scope = app.Services.CreateScope();
+// var services = scope.ServiceProvider;
 
-try
-{
-    var context = services.GetRequiredService<WestcoastCarsContext>();
-    await context.Database.MigrateAsync();
-    await SeedData.LoadManufacturerData(context);
-    await SeedData.LoadFuelTypeData(context);
-    await SeedData.LoadTransmissionsData(context);
-    await SeedData.LoadVehicleData(context);
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-    throw;
-}
+// try
+// {
+//     var context = services.GetRequiredService<WestcoastCarsContext>();
+//     await context.Database.MigrateAsync();
+//     await SeedData.LoadManufacturerData(context);
+//     await SeedData.LoadFuelTypeData(context);
+//     await SeedData.LoadTransmissionsData(context);
+//     await SeedData.LoadVehicleData(context);
+// }
+// catch (Exception ex)
+// {
+//     Console.WriteLine(ex.Message);
+//     throw;
+// }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
